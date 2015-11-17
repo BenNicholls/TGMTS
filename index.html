@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html ng-app="demoApp">
+<head>
+<meta charset="utf-8"> 
+<title>Maple Leafs Trade Simulator</title>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+
+<!-- Bootstrap Stuff -->
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<script src="app.js"></script>
+</head>
+
+<body ng-controller="SimCtrl as sim">
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div>
+      <ul class="nav navbar-nav">
+        <li><a href="#">NEXT WEEK</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a>Score: {{sim.score}}</a></li>
+    </div>
+  </div>
+</nav>
+
+<div class="containter text-center">
+	<h1>{{sim.title}}</h1>
+
+<div class="row">
+<div class="col-md-6">
+	<table class="table table-striped table-condensed">
+	<tr ng-repeat="x in sim.roster" ng-class="sim.statuses[x.stat][1]">
+		<td>{{x.name}}</td><td>{{x.age}}</td>
+		<td><button type="button" class="btn btn-xs" ng-click="sim.Trade(x.name)" ng-class="{disabled:x.stat!=0}">Trade</button></td>
+	</tr>
+	</table>
+</div>
+	<div class="col-md-6">
+		<div ng-show="sim.tradescreen">
+			{{sim.tradeplayer}} is being traded! {{sim.traderesult}}
+		</div>
+	</div>
+</div>
+</div>
+
+</body>
+</html>
