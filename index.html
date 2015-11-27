@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="demoApp">
+<html ng-app="GMapp">
 <head>
 <meta charset="utf-8"> 
 <title>Maple Leafs Trade Simulator</title>
@@ -13,35 +13,51 @@
 <script src="app.js"></script>
 </head>
 
-<body ng-controller="SimCtrl as sim">
+<body ng-controller="GameCtrl as game">
+
+<div class="modal fade" tabindex="-1" role="dialog" id="eventModal" ng-controller="EventCtrl as ev">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Another Week, Another Choice.</h4>
+      </div>
+      <div class="modal-body">
+        <p>{{ev.eventText}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div>
       <ul class="nav navbar-nav">
-        <li><a href="#">NEXT WEEK</a></li>
+        <li><button type="button" data-toggle="modal" data-target="#eventModal">NEXT WEEK</button></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a>Score: {{sim.score}}</a></li>
+        <li><a>Score: {{game.score}}</a></li>
     </div>
   </div>
 </nav>
 
 <div class="containter text-center">
-	<h1>{{sim.title}}</h1>
+	<h1>{{game.title}}</h1>
 
 <div class="row">
 <div class="col-md-6">
 	<table class="table table-striped table-condensed">
-	<tr ng-repeat="x in sim.roster" ng-class="sim.statuses[x.stat][1]">
+	<tr ng-repeat="x in game.getRoster()" ng-class="game.statuses[x.stat][1]">
 		<td>{{x.name}}</td><td>{{x.age}}</td>
-		<td><button type="button" class="btn btn-xs" ng-click="sim.Trade(x.name)" ng-class="{disabled:x.stat!=0}">Trade</button></td>
+		<td><button type="button" class="btn btn-xs" ng-click="game.Trade(x.name)" ng-class="{disabled:x.stat!=0}">Trade</button></td>
 	</tr>
 	</table>
 </div>
 	<div class="col-md-6">
-		<div ng-show="sim.tradescreen">
-			{{sim.tradeplayer}} is being traded! {{sim.traderesult}}
+		<div ng-show="game.tradescreen">
+			{{game.tradeplayer}} is being traded! {{game.traderesult}}
 		</div>
 	</div>
 </div>

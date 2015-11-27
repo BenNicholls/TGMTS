@@ -1,13 +1,8 @@
-angular.module('demoApp', [])
-	.controller('SimCtrl', function () {
-		this.title = 'Toronto Maple Leafs Trade Simulator';
-		this.tradescreen = false
-		this.tradeplayer = ""
-		this.traderesult = ""
-		this.score = 0
+var GMapp = angular.module('GMapp', []);
 
-		//Name, age, status
-		this.roster = [
+GMapp.factory('SimService', function() {
+	return simulation = {
+		roster: [
 			{name:"Mark Arcobello", age:27, stat:0},
 			{name:"Jonathan Bernier", age:27, stat:0},
 			{name:"Brad Boyes", age:33, stat:0},
@@ -32,36 +27,52 @@ angular.module('demoApp', [])
 			{name:"Nick Spaling", age:27, stat:0},
 			{name:"James van Riemsdyk", age:26, stat:0},
 			{name:"Daniel Winnik", age:30, stat:0}
-		 ];
+	 	],
+	 }
+});
 
-		 //status name, associated BS class
-		 this.statuses = [
-		 	["playing", "success"],
-		 	["dead", "danger"],
-		 	["injured", "warning"],
-		 	["misc", "info"]
-		 ];
+GMapp.controller('GameCtrl', ['SimService', function(SimService) {
+	this.title = 'Toronto Maple Leafs Trade Simulator';
+	this.tradescreen = false
+	this.tradeplayer = ""
+	this.traderesult = ""
+	this.score = 0		
+
+	//status name, associated BS class
+	this.statuses = [
+	 	["playing", "success"],
+	 	["dead", "danger"],
+	 	["injured", "warning"],
+	 	["misc", "info"]
+	 ];
+
+	 this.getRoster = function () {return SimService.roster};
+
+	 this.Trade = function (name) {
+	 	if (!this.tradescreen) {
+	 		this.tradescreen = true
+	 	}
+	 	this.tradeplayer = name;
+
+ 		//find player in roster and kill them, or give out some skate blades
+	 	for (var i = SimService.roster.length - 1; i >= 0; i--) {
+	 		if (SimService.roster[i].name == name) {
+	 			if (Math.floor(Math.random()*2)==0) {
+	 				SimService.roster[i].stat = 1;
+	 				this.traderesult = "Oops they died!";
+	 			} else {
+	 				SimService.roster[i].stat = 3;
+	 				this.traderesult = "You got a bag of Ron Hextall's old skate guards.";
+	 				this.score = this.score + 1;
+	 			}
+	 		}
+	 		
+	 	};
+	 }
 		
-		 this.Trade = function (name) {
-		 	if (!this.tradescreen) {
-		 		this.tradescreen = true
-		 	}
-		 	this.tradeplayer = name;
+}]);
 
-	 		//find player in roster and kill them, or give out some skate blades
-		 	for (var i = this.roster.length - 1; i >= 0; i--) {
-		 		if (this.roster[i].name == name) {
-		 			if (Math.floor(Math.random()*2)==0) {
-		 				this.roster[i].stat = 1;
-		 				this.traderesult = "Oops they died!";
-		 			} else {
-		 				this.roster[i].stat = 3;
-		 				this.traderesult = "You got a bag of Ron Hextall's old skate guards.";
-		 				this.score = this.score + 1;
-		 			}
-		 		}
-		 		
-		 	};
-		 }
+GMapp.controller('EventCtrl', ['SimService', function(SimService) {
+		this.eventText = "Trade Brad Boyes for a 1000mg of weed? Fans love big number deals."
 
-	});
+}]);
